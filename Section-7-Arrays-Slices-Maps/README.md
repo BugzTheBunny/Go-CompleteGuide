@@ -120,43 +120,41 @@ Note that everything can be a key.
     ```
 
 ## `make`
-There is the `make` function, that provides you the opportunity to create arrays / slices with already delegated memmory amount.
+- There is the `make` function, that provides you the opportunity to create arrays / slices with already delegated memmory amount.
+    ```
+        func main() {
+            courseRatings := make(map[string]float64, 3)
+            fmt.Println(courseRatings)
+        }
+    ```
+- You also can use type alias for this, and make it better from a developer standpoint.
+    ```
+        package main
 
+        import "fmt"
 
-```
-    func main() {
-        courseRatings := make(map[string]float64, 3)
-        fmt.Println(courseRatings)
-    }
-```
-You also can use type alias for this, and make it better from a developer standpoint.
-```
-    package main
+        type floatMap map[string]float64
 
-    import "fmt"
+        func (m floatMap) output() {
+            fmt.Println(m)
+        }
 
-    type floatMap map[string]float64
+        func main() {
+            courseRatings := make(floatMap, 3)
+            courseRatings.output()
+        }
 
-    func (m floatMap) output() {
-        fmt.Println(m)
-    }
-
-    func main() {
-        courseRatings := make(floatMap, 3)
-        courseRatings.output()
-    }
-
-```
+    ```
 
 ## `Iteration`
-You can loop over Maps / Slices / Arrays in this way:
-```
-	users := make([]string, 2, 5)
-	users[0] = "Tom"
-	users = append(users, "Josh")
-	users = append(users, "Tim")
+- You can loop over Maps / Slices / Arrays in this way:
+    ```
+        users := make([]string, 2, 5)
+        users[0] = "Tom"
+        users = append(users, "Josh")
+        users = append(users, "Tim")
 
-	for index, value := range users {
-		fmt.Println(index, " ", value)
-	}
-```
+        for index, value := range users {
+            fmt.Println(index, " ", value)
+        }
+    ```
