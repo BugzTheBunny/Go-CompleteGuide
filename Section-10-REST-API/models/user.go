@@ -2,6 +2,7 @@ package models
 
 import (
 	"errors"
+	"fmt"
 
 	"example.com/rest/db"
 	utils "example.com/rest/utilities"
@@ -14,8 +15,9 @@ type User struct {
 }
 
 func (u User) Save() error {
-	query := "INSER INTO users(email, password) VALUES(?, ?)"
+	query := "INSERT INTO users(email, password) VALUES (?, ?)"
 	stmt, err := db.DB.Prepare(query)
+
 	if err != nil {
 		return err
 	}
@@ -35,24 +37,24 @@ func (u User) Save() error {
 	}
 
 	userId, err := result.LastInsertId()
-	u.ID = userId
 
+	u.ID = userId
 	return err
 }
 
 func (u User) ValidateCredentials() error {
-	query := "SELECT password FROM users WHERE email = ?"
+	query := "SELECT id, password FROM users WHERE email = ?"
 	row := db.DB.QueryRow(query, u.Email)
 
-	var retrivedPassword string
-
-	err := row.Scan(&retrivedPassword)
+	var retrievedPassword string
+	err := row.Scan(&u.ID, &retrievedPassword)
 
 	if err != nil {
+		fmt.Println(err)
 		return errors.New("Credentials invalid")
 	}
 
-	passwordIsValid := utils.CheckPasswordHash(u.Password, retrivedPassword)
+	passwordIsValid := utils.CheckPasswordHash(u.Password, retrievedPassword)
 
 	if !passwordIsValid {
 		return errors.New("Credentials invalid")

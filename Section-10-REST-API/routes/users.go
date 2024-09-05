@@ -4,44 +4,53 @@ import (
 	"net/http"
 
 	"example.com/rest/models"
+	utils "example.com/rest/utilities"
 	"github.com/gin-gonic/gin"
 )
 
-func signup(ctx *gin.Context) {
+func signup(context *gin.Context) {
 	var user models.User
-	err := ctx.ShouldBindJSON(&user)
+
+	err := context.ShouldBindJSON(&user)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"message": "Could not parse the request"})
+		context.JSON(http.StatusBadRequest, gin.H{"message": "Could not parse request data."})
 		return
 	}
 
 	err = user.Save()
 
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"message": "Could not create user"})
-
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Could not save user."})
+		return
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{"message": "User created successfully"})
-
+	context.JSON(http.StatusCreated, gin.H{"message": "User created successfully"})
 }
 
-func login(ctx *gin.Context) {
+func login(context *gin.Context) {
 	var user models.User
 
-	err := ctx.ShouldBindJSON(&user)
+	err := context.ShouldBindJSON(&user)
 
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"message": "Could not parse the request"})
+		context.JSON(http.StatusBadRequest, gin.H{"message": "Could not parse request data."})
 		return
 	}
 
 	err = user.ValidateCredentials()
 
 	if err != nil {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"message": "Could not authenticate user."})
+		context.JSON(http.StatusUnauthorized, gin.H{"message": "Could not authenticate user.", "error": err})
+		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"message": "Login Successfull"})
+	token, err := utils.GenerateToken(user.Email, user.ID)
+
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Could not authenticate user.", "error": err})
+		return
+	}
+
+	context.JSON(http.StatusOK, gin.H{"message": "Login successful!", "token": token})
 }
