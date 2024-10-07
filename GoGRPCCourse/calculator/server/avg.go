@@ -27,6 +27,7 @@ func (s *Server) Avg(stream grpc.ClientStreamingServer[pb.AvgRequest, pb.AvgResp
 			log.Fatalf("Error while reading client stream: %v\n", err)
 		}
 
+		log.Printf("Receiving number: %d\n", req.Number)
 		sum += int(req.Number)
 		count++
 	}
