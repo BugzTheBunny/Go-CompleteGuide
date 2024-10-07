@@ -2,9 +2,9 @@
 
 This repo contains different courses im doing of Go.
 
-- GO Complete Course - contains the study progress on [this](https://www.udemy.com/course/go-the-complete-guide/?couponCode=OF83024E) course.
+- [GO Complete Course](https://www.udemy.com/course/go-the-complete-guide/?couponCode=OF83024E)
 The course included all of the basics + a REST-API backend demo app.
 
 ![certificate](/certificate.jpg)
 
-- [Complete Backend Engineering Course in Go](https://www.youtube.com/watch?v=h3fqD6IprIA)
+- [gRPC [Golang] Master Class: Build Modern API & Microservices](https://www.youtube.com/watch?v=h3fqD6IprIA)
